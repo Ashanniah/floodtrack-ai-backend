@@ -1,18 +1,23 @@
 # Deploy FloodTrack AI backend to Cloud Run
 substitutions:
   _SERVICE_NAME: verify-flood-image-floodtrack
-  _REGION: asia-southeast1                 
+  _REGION: asia-southeast1
 
+options:
+  logging: CLOUD_LOGGING_ONLY
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  
 steps:
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     entrypoint: bash
     args:
-      - -ceu
+      - -c
       - |
         gcloud run deploy ${_SERVICE_NAME} \
           --region=${_REGION} \
-          --source . \
+          --source=. \
           --platform=managed \
           --allow-unauthenticated \
           --set-secrets=GEMINI_API_KEY=floodtrack-ai-key:latest
+
 images: []
